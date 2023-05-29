@@ -24,10 +24,16 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         toLoginPage()
-
+        toRegEmailPage()
     }
+
+    private fun toRegEmailPage() {
+        binding.startBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_startFragment_to_emailRegFragment)
+        }
+    }
+
     private fun toLoginPage() {
         binding.textMainPageSignIn.setOnClickListener {
             findNavController().navigate(R.id.action_startFragment_to_loginFragment)
