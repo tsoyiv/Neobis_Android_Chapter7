@@ -1,6 +1,8 @@
 package com.example.my_app_seven.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,11 +27,34 @@ class ResetPasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toLoginPage()
+        checkInput()
     }
 
     private fun toLoginPage() {
         binding.returnLoginPageBtn.setOnClickListener {
             findNavController().navigate(R.id.action_resetPasswordFragment_to_loginFragment)
+        }
+    }
+    private fun checkInput() {
+        binding.inputResetEmail.addTextChangedListener(inputTextWatcher)
+    }
+    private val inputTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            val usernameInput = binding.inputResetEmail.text.toString().trim()
+
+            val button = binding.resetBtnNext
+
+            if (!usernameInput.contains("@")) {
+                button.isEnabled = false
+                button.setBackgroundResource(R.drawable.button_grey)
+            } else {
+                button.isEnabled = true
+                button.setBackgroundResource(R.drawable.rounded_btn)
+            }
+        }
+        override fun afterTextChanged(s: Editable?) {
         }
     }
 }

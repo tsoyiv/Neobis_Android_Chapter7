@@ -48,7 +48,7 @@ class LoginFragment : Fragment() {
 
             val button = binding.loginButton
 
-            if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
+            if (passwordInput.isEmpty() || !usernameInput.contains("@")) {
                 button.isEnabled = false
                 button.setBackgroundResource(R.drawable.button_grey)
             } else {
