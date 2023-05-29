@@ -7,30 +7,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
-import com.example.my_app_seven.databinding.FragmentStartBinding
+import com.example.my_app_seven.databinding.FragmentLoginBinding
 
-class StartFragment : Fragment() {
+class LoginFragment : Fragment() {
 
-    private lateinit var binding: FragmentStartBinding
+    private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentStartBinding.inflate(inflater, container, false)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        toLoginPage()
-
+        toResetPassword()
     }
-    private fun toLoginPage() {
-        binding.textMainPageSignIn.setOnClickListener {
-            findNavController().navigate(R.id.action_startFragment_to_loginFragment)
+
+    private fun toResetPassword() {
+        binding.textForgetPsw.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
         }
     }
 }

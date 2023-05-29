@@ -7,7 +7,6 @@ plugins {
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-    namespace 'com.example.my_app_seven'
     compileSdk 33
 
     defaultConfig {
