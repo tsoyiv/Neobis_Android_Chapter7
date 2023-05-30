@@ -59,5 +59,18 @@
         android:id="@+id/profileRegFragment"
         android:name="com.example.my_app_seven.fragments.ProfileRegFragment"
         android:label="fragment_profile_reg"
-        tools:layout="@layout/fragment_profile_reg" />
+        tools:layout="@layout/fragment_profile_reg" >
+        <action
+            android:id="@+id/action_profileRegFragment_to_createPasswordFragment"
+            app:destination="@id/createPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPasswordFragment"
+        android:name="com.example.my_app_seven.fragments.CreatePasswordFragment"
+        android:label="fragment_create_password"
+        tools:layout="@layout/fragment_create_password" >
+        <action
+            android:id="@+id/action_createPasswordFragment_to_profileRegFragment"
+            app:destination="@id/profileRegFragment" />
+    </fragment>
 </navigation>
