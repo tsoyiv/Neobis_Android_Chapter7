@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_profileRegFragment_to_createPasswordFragment"
             app:destination="@id/createPasswordFragment" />
+        <action
+            android:id="@+id/action_profileRegFragment_to_emailRegFragment"
+            app:destination="@id/emailRegFragment" />
     </fragment>
     <fragment
         android:id="@+id/createPasswordFragment"
