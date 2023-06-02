@@ -1,16 +1,20 @@
 package com.example.my_app_seven.fragments
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.example.my_app_seven.R
 import com.example.my_app_seven.databinding.FragmentSecondResetPasswordBinding
-import kotlinx.android.synthetic.main.fragment_create_password.*
+import com.google.android.material.snackbar.Snackbar
 
 
 class SecondResetPasswordFragment : Fragment() {
@@ -47,6 +51,7 @@ class SecondResetPasswordFragment : Fragment() {
 
             if (isPasswordsSimilar && hasUppercase && hasNumber && hasSymbol) {
                 button.isEnabled = true
+                callSnackBar()
                 button.setBackgroundResource(R.drawable.rounded_btn)
             } else {
                 button.isEnabled = false
@@ -56,6 +61,27 @@ class SecondResetPasswordFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {
         }
     }
+
+    @SuppressLint("RestrictedApi")
+    private fun callSnackBar() {
+        binding.regResetPasswordBtnSave.setOnClickListener {
+            val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT)
+            val inflater = LayoutInflater.from(snackbar.context)
+            val customSnackbarLayout = inflater.inflate(R.layout.custom_snackbar, null)
+
+            snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+            val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+            snackbarLayout.setPadding(0, 0, 0, 0)
+            snackbarLayout.addView(customSnackbarLayout, 0)
+
+            val params = snackbarLayout.layoutParams as FrameLayout.LayoutParams
+            params.gravity = Gravity.TOP
+            snackbarLayout.layoutParams = params
+
+            snackbar.show()
+        }
+    }
+
     private fun registrationDataCheck() {
         val password = binding.inputNewPassword.text.toString()
         val passwordRep = binding.inputNewPasswordRepeat.text.toString()
