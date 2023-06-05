@@ -1,5 +1,6 @@
 package com.example.my_app_seven.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,14 +8,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
+import com.example.my_app_seven.api.RetrofitInstance
+import com.example.my_app_seven.api.UserAPI
 import com.example.my_app_seven.databinding.FragmentLoginBinding
+import com.example.my_app_seven.model.User
+import kotlinx.android.synthetic.main.fragment_login.*
+import retrofit2.create
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+    private lateinit var userAPI: UserAPI
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +37,13 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         toResetPassword()
         checkInput()
+
+        userAPI = RetrofitInstance.getInstance().create(UserAPI::class.java)
+        binding.loginButton.setOnClickListener {
+//            val dialog = SpotsDialog.Builder().setContext(this).build()
+//            dialog.show()
+        }
+
     }
     private fun toResetPassword() {
         binding.textForgetPsw.setOnClickListener {
