@@ -1,4 +1,4 @@
-package com.example.my_app_seven.model
+package com.example.my_app_seven.models
 
 import androidx.room.Entity
 
