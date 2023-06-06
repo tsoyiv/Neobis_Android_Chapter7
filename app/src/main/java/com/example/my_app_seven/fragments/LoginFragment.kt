@@ -11,11 +11,17 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
 import com.example.my_app_seven.api.RetrofitInstance
+import com.example.my_app_seven.api.UserAPI
 import com.example.my_app_seven.databinding.FragmentLoginBinding
 import com.example.my_app_seven.models.LoginRequest
+import com.example.my_app_seven.models.LoginResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginFragment : Fragment() {
 
@@ -36,7 +42,6 @@ class LoginFragment : Fragment() {
         checkInput()
         login()
     }
-
     private fun login() {
         binding.loginButton.setOnClickListener {
             val email = binding.inputLoginEmail.text.toString()
@@ -47,14 +52,21 @@ class LoginFragment : Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val response = RetrofitInstance.api.login(loginRequest)
-
-                    if (response != null) {
-                        Toast.makeText(requireContext(), "Logged", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(requireContext(), "do not exist", Toast.LENGTH_SHORT).show()
-                    }
+                    onResponse(response)
                 } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "User does not exist", Toast.LENGTH_SHORT).show()
+                    }
                 }
+            }
+        }
+    }
+    private suspend fun onResponse(loginResponse: LoginResponse?) {
+        withContext(Dispatchers.Main) {
+            if (loginResponse != null) {
+                Toast.makeText(context, "user exist", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "User does not exist", Toast.LENGTH_SHORT).show()
             }
         }
     }

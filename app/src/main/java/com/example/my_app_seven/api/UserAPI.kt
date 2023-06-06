@@ -9,20 +9,20 @@ import retrofit2.Call
 import retrofit2.http.POST
 
 interface UserAPI {
-    @POST("/forgot_password/")
-    fun forgotPassword(@Body request: ForgotPasswordRequest): Call<UserAPI>
+//    @POST("/forgot_password/")
+//    fun forgotPassword(@Body request: ForgotPasswordRequest): Call<UserAPI>
+//
+//    @POST("/forgot_password_confirm/")
+//    fun forgotPasswordConfirm(@Body request: ForgotPasswordRequest): Call<UserAPI>
 
-    @POST("/forgot_password_confirm/")
-    fun forgotPasswordConfirm(@Body request: ForgotPasswordRequest): Call<UserAPI>
-
-    @POST("/login/")
+    @POST("login/")
     suspend fun login(@Body request: LoginRequest): LoginResponse
 
-    @POST("/refresh/")
-    fun refresh(): Call<UserAPI>
-
-    @POST("/register/")
-    fun register(@Body request: RegisterRequest): Call<UserAPI>
+//    @POST("/refresh/")
+//    fun refresh(): Call<UserAPI>
+//
+//    @POST("/register/")
+//    fun register(@Body request: RegisterRequest): Call<UserAPI>
 
 //    @POST("/register")
 //    fun registerUser(@Body loginRequest: User): Observable<String>
