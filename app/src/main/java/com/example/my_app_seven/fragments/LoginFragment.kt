@@ -7,13 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
 import com.example.my_app_seven.api.RetrofitInstance
-import com.example.my_app_seven.api.UserAPI
 import com.example.my_app_seven.databinding.FragmentLoginBinding
-import kotlinx.android.synthetic.main.fragment_login.*
-import retrofit2.create
+import com.example.my_app_seven.models.LoginRequest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
@@ -32,19 +34,46 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         toResetPassword()
         checkInput()
+        login()
     }
+
+    private fun login() {
+        binding.loginButton.setOnClickListener {
+            val email = binding.inputLoginEmail.text.toString()
+            val password = binding.inputLoginPassword.text.toString()
+
+            val loginRequest = LoginRequest(email, password)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val response = RetrofitInstance.api.login(loginRequest)
+
+                    if (response != null) {
+                        Toast.makeText(requireContext(), "Logged", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "do not exist", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                }
+            }
+        }
+    }
+
     private fun toResetPassword() {
         binding.textForgetPsw.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
         }
     }
+
     private fun checkInput() {
         binding.inputLoginEmail.addTextChangedListener(inputTextWatcher)
         binding.inputLoginPassword.addTextChangedListener(inputTextWatcher)
     }
+
     private val inputTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
+
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val usernameInput = binding.inputLoginEmail.text.toString().trim()
             val passwordInput = binding.inputLoginPassword.text.toString().trim()
@@ -59,6 +88,7 @@ class LoginFragment : Fragment() {
                 button.setBackgroundResource(R.drawable.rounded_btn)
             }
         }
+
         override fun afterTextChanged(s: Editable?) {
         }
     }

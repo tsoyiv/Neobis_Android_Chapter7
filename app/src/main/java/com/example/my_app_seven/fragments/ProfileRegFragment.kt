@@ -9,9 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
+import com.example.my_app_seven.api.UserAPI
 import com.example.my_app_seven.databinding.FragmentProfileRegBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,7 +41,31 @@ class ProfileRegFragment : Fragment() {
         checkInput()
         toEmailPageBack()
         toCreatePassword()
+        //register()
     }
+
+//    private fun register() {
+//        binding.regProfileBtnNext.setOnClickListener {
+//
+//            val name = binding.inputRegNameProfile.text.toString().trim()
+//            val surname = binding.inputRegSurnameProfile.text.toString().trim()
+//            val birthDate = binding.inputRegBirthProfile.text.toString().trim()
+//            val email = binding.inputEmailProfile.text.toString().trim()
+//            //val apiRepository = UserAPI(apiService)
+//
+//            CoroutineScope(Dispatchers.IO).launch {
+//                val response = apiRepository.register(email)
+//                withContext(Dispatchers.Main) {
+//                    if (response.isSuccessful) {
+//                        Toast.makeText(requireContext(), "okay", Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+//                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private fun pickDate() {
         val datePicker = binding.inputRegBirthProfile

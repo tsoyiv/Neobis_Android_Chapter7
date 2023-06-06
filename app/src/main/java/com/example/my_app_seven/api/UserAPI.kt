@@ -2,6 +2,7 @@ package com.example.my_app_seven.api
 
 import com.example.my_app_seven.models.ForgotPasswordRequest
 import com.example.my_app_seven.models.LoginRequest
+import com.example.my_app_seven.models.LoginResponse
 import com.example.my_app_seven.models.RegisterRequest
 import retrofit2.http.Body
 import retrofit2.Call
@@ -15,7 +16,7 @@ interface UserAPI {
     fun forgotPasswordConfirm(@Body request: ForgotPasswordRequest): Call<UserAPI>
 
     @POST("/login/")
-    fun login(@Body request: LoginRequest): Call<UserAPI>
+    suspend fun login(@Body request: LoginRequest): LoginResponse
 
     @POST("/refresh/")
     fun refresh(): Call<UserAPI>

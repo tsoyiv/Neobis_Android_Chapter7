@@ -1,10 +1,9 @@
 package com.example.my_app_seven.models
 
-import androidx.room.Entity
+import com.google.gson.annotations.SerializedName
 
-@Entity
-class User {
-    var email: String = ""
-    var password: String = ""
-    var password_check: String = ""
-}
+data class User(
+    val email: String,
+    val password: String,
+    //val password_confirm: String
+)
