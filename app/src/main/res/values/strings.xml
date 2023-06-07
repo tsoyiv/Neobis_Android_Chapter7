@@ -2,4 +2,5 @@
     <string name="app_name">My_App_Seven</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email_message_placeholder">На вашу почту\n<font color="#5D5FEF">«%1$s»</font> было\nотправлено письмо</string>
 </resources>

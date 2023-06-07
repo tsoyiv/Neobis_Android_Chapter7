@@ -41,7 +41,6 @@ class EmailRegFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toMainPage()
-        //toProfilePage()
         checkInput()
         loginReg()
     }
@@ -59,7 +58,7 @@ class EmailRegFragment : Fragment() {
                     } else {
                          binding.inputRegEmailFragment.setBoxStrokeColor(Color.RED); //
                          binding.inputRegEmailFragment.setDefaultHintTextColor(ColorStateList.valueOf(Color.RED)); //
-                         binding.errorText.setText("Данная почта уже зарегистривана"); //
+                         binding.errorText.setText("Неправильный Ввод, повторите попытку"); //
                          binding.errorText.setVisibility(View.VISIBLE);
                     }
                 }
@@ -69,33 +68,6 @@ class EmailRegFragment : Fragment() {
             })
         }
     }
-
-    private fun toProfilePage() {
-        binding.regEmailBtnNext.setOnClickListener {
-            callDialog()
-            findNavController().navigate(R.id.action_emailRegFragment_to_profileRegFragment)
-        }
-    }
-
-    private fun callDialog() {
-        val dialogBinding = layoutInflater.inflate(R.layout.custom_alert_dialog_email, null)
-//        AlertDialog.Builder(requireContext()).apply {
-//            setTitle("На вашу почту «dojacat01.gmail.com» было отправлено письмо ")
-//        }
-
-        val myDialog = Dialog(requireContext())
-        myDialog.setContentView(dialogBinding)
-
-        myDialog.setCancelable(true)
-        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        myDialog.show()
-
-        val yesBtn = dialogBinding.confirm_btn
-        yesBtn.setOnClickListener {
-            myDialog.dismiss()
-        }
-    }
-
 
     private fun toMainPage() {
         binding.returnMainPageBtn.setOnClickListener {

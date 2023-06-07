@@ -1,6 +1,8 @@
 package com.example.my_app_seven.fragments
 
+import android.app.Dialog
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -16,6 +19,7 @@ import com.example.my_app_seven.api.RetrofitInstance
 import com.example.my_app_seven.databinding.FragmentCreatePasswordBinding
 import com.example.my_app_seven.models.UserRegRequest
 import com.example.my_app_seven.view_model.RegistrationViewModel
+import kotlinx.android.synthetic.main.custom_alert_dialog_email.view.*
 import kotlinx.android.synthetic.main.fragment_create_password.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -77,7 +81,9 @@ class CreatePasswordFragment : Fragment() {
                 response: Response<Unit>
             ) {
                 if (response.isSuccessful) {
+                    val email = registrationViewModel.email ?: ""
                     Toast.makeText(requireContext(), "User successfully registered. Check email to activate account", Toast.LENGTH_SHORT).show()
+                    callDialog(email)
                     findNavController().navigate(R.id.action_createPasswordFragment_to_loginFragment)
                 } else {
                     Toast.makeText(requireContext(), "User with this email already exist", Toast.LENGTH_SHORT).show()
@@ -87,6 +93,44 @@ class CreatePasswordFragment : Fragment() {
             override fun onFailure(call: Call<Unit>, t: Throwable) {
             }
         })
+    }
+    private fun callDialog(email: String) {
+        val dialogBinding = layoutInflater.inflate(R.layout.custom_alert_dialog_email, null)
+
+        val myDialog = Dialog(requireContext())
+        myDialog.setContentView(dialogBinding)
+
+        val emailTextView = dialogBinding.findViewById<TextView>(R.id.email_text_view)
+        emailTextView.text = getString(R.string.email_message_placeholder, email)
+
+        myDialog.setCancelable(true)
+        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        myDialog.show()
+
+        val yesBtn = dialogBinding.confirm_btn
+        yesBtn.setOnClickListener {
+            myDialog.dismiss()
+        }
+    }
+
+
+    private fun callDialog() {
+        val dialogBinding = layoutInflater.inflate(R.layout.custom_alert_dialog_email, null)
+//        AlertDialog.Builder(requireContext()).apply {
+//            setTitle("На вашу почту «dojacat01.gmail.com» было отправлено письмо ")
+//        }
+
+        val myDialog = Dialog(requireContext())
+        myDialog.setContentView(dialogBinding)
+
+        myDialog.setCancelable(true)
+        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        myDialog.show()
+
+        val yesBtn = dialogBinding.confirm_btn
+        yesBtn.setOnClickListener {
+            myDialog.dismiss()
+        }
     }
 
     private fun checkInput() {
