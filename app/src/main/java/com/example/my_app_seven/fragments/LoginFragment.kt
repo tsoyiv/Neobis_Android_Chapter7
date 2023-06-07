@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
 import com.example.my_app_seven.api.RetrofitInstance
@@ -44,6 +45,13 @@ class LoginFragment : Fragment() {
         toResetPassword()
         checkInput()
         login()
+        returnToMainPage()
+    }
+
+    private fun returnToMainPage() {
+        binding.returnLoginPageBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_startFragment)
+        }
     }
 
     private fun login() {
@@ -55,6 +63,9 @@ class LoginFragment : Fragment() {
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
+                    withContext(Dispatchers.Main) {
+                        resetErrors()
+                    }
                     val response = RetrofitInstance.api.login(loginRequest)
                     onResponse(response)
                 } catch (e: Exception) {
@@ -75,23 +86,24 @@ class LoginFragment : Fragment() {
             }
         }
     }
+    private fun resetErrors() {
+        val defaultBoxStrokeColor = ContextCompat.getColor(requireContext(), R.color.defaultBoxStrokeColor)
+        val defaultHintTextColor = ContextCompat.getColor(requireContext(), R.color.defaultHintTextColor)
+
+        binding.inputLoginEmailLayout.setBoxStrokeColor(defaultBoxStrokeColor)
+        binding.inputLoginEmailLayout.setDefaultHintTextColor(ColorStateList.valueOf(defaultHintTextColor))
+        binding.inputLoginPasswordLayout.setBoxStrokeColor(defaultBoxStrokeColor)
+        binding.inputLoginPasswordLayout.setDefaultHintTextColor(ColorStateList.valueOf(defaultHintTextColor))
+        binding.errorText.setText("")
+        binding.errorText.setVisibility(View.GONE)
+    }
     private fun checkOnError() {
-        binding.inputLoginEmailLayout.setBoxStrokeColor(Color.RED);
-        binding.inputLoginEmailLayout.setDefaultHintTextColor(
-            ColorStateList.valueOf(
-                Color.RED
-            )
-        );
-        binding.errorText.setText("Неверный логин или пароль");
-        binding.errorText.setVisibility(View.VISIBLE);
-        binding.inputLoginPasswordLayout.setBoxStrokeColor(Color.RED);
-        binding.inputLoginPasswordLayout.setDefaultHintTextColor(
-            ColorStateList.valueOf(
-                Color.RED
-            )
-        );
-        binding.errorText.setText("Неверный логин или пароль");
-        binding.errorText.setVisibility(View.VISIBLE);
+        binding.inputLoginEmailLayout.setBoxStrokeColor(Color.RED)
+        binding.inputLoginEmailLayout.setDefaultHintTextColor(ColorStateList.valueOf(Color.RED))
+        binding.inputLoginPasswordLayout.setBoxStrokeColor(Color.RED)
+        binding.inputLoginPasswordLayout.setDefaultHintTextColor(ColorStateList.valueOf(Color.RED))
+        binding.errorText.setText("Неверный логин или пароль")
+        binding.errorText.setVisibility(View.VISIBLE)
     }
 
     private fun toResetPassword() {
