@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
@@ -53,9 +54,8 @@ class ResetPasswordFragment : Fragment() {
                 Callback<Unit> {
                 override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                     if (response.isSuccessful) {
-                        //toResetPassword()
                         findNavController().navigate(R.id.action_resetPasswordFragment_to_secondResetPasswordFragment)
-                        Toast.makeText(requireContext(), "message sent", Toast.LENGTH_SHORT).show()
+                        callDialog(email)
                     } else {
                         Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
                     }
@@ -68,21 +68,15 @@ class ResetPasswordFragment : Fragment() {
         }
     }
 
-    private fun toResetPassword() {
-        binding.resetBtnNext.setOnClickListener {
-            callDialog()
-            findNavController().navigate(R.id.action_resetPasswordFragment_to_secondResetPasswordFragment)
-        }
-    }
 
-    private fun callDialog() {
+    private fun callDialog(email: String) {
         val dialogBinding = layoutInflater.inflate(R.layout.custom_alert_dialog_email, null)
-//        AlertDialog.Builder(requireContext()).apply {
-//            setTitle("На вашу почту «dojacat01.gmail.com» было отправлено письмо ")
-//        }
 
         val myDialog = Dialog(requireContext())
         myDialog.setContentView(dialogBinding)
+
+        val emailTextView = dialogBinding.findViewById<TextView>(R.id.email_text_view)
+        emailTextView.text = getString(R.string.email_message_placeholder, email)
 
         myDialog.setCancelable(true)
         myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

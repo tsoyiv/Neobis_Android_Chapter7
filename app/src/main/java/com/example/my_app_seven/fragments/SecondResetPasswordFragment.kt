@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
 import com.example.my_app_seven.api.RetrofitInstance
 import com.example.my_app_seven.api.UserAPI
@@ -51,6 +52,13 @@ class SecondResetPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkInput()
         resetPasswordCreate()
+        returnToLoginPage()
+    }
+
+    private fun returnToLoginPage() {
+        binding.regResetPasswordBtnSave.setOnClickListener {
+            findNavController().navigate(R.id.action_secondResetPasswordFragment_to_loginFragment)
+        }
     }
 
     private fun resetPasswordCreate() {

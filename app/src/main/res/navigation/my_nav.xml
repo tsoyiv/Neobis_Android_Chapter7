@@ -45,7 +45,11 @@
         android:id="@+id/secondResetPasswordFragment"
         android:name="com.example.my_app_seven.fragments.SecondResetPasswordFragment"
         android:label="fragment_second_reset_password"
-        tools:layout="@layout/fragment_second_reset_password" />
+        tools:layout="@layout/fragment_second_reset_password" >
+        <action
+            android:id="@+id/action_secondResetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/emailRegFragment"
         android:name="com.example.my_app_seven.fragments.EmailRegFragment"
