@@ -27,16 +27,4 @@ interface UserAPI {
 
     @POST("register_confirm/")
     fun registerUser(@Body request: UserRegRequest): Call<Unit>
-
-//    @POST("/refresh/")
-//    fun refresh(): Call<UserAPI>
-//
-//    @POST("/register/")
-//    fun register(@Body request: RegisterRequest): Call<UserAPI>
-
-//    @POST("/register")
-//    fun registerUser(@Body loginRequest: User): Observable<String>
-//
-//    @POST("/login")
-//    fun loginUser(@Body signUpRequest: User): Observable<String>
 }

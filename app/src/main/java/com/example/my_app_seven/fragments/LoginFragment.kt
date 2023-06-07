@@ -1,5 +1,7 @@
 package com.example.my_app_seven.fragments
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -43,6 +45,7 @@ class LoginFragment : Fragment() {
         checkInput()
         login()
     }
+
     private fun login() {
         binding.loginButton.setOnClickListener {
             val email = binding.inputLoginEmail.text.toString()
@@ -56,20 +59,39 @@ class LoginFragment : Fragment() {
                     onResponse(response)
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "User does not exist", Toast.LENGTH_SHORT).show()
+                        checkOnError()
                     }
                 }
             }
         }
     }
+
     private suspend fun onResponse(loginResponse: LoginResponse?) {
         withContext(Dispatchers.Main) {
             if (loginResponse != null) {
-                Toast.makeText(context, "user exist", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "You are IN", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "User does not exist", Toast.LENGTH_SHORT).show()
+                checkOnError()
             }
         }
+    }
+    private fun checkOnError() {
+        binding.inputLoginEmailLayout.setBoxStrokeColor(Color.RED);
+        binding.inputLoginEmailLayout.setDefaultHintTextColor(
+            ColorStateList.valueOf(
+                Color.RED
+            )
+        );
+        binding.errorText.setText("Неверный логин или пароль");
+        binding.errorText.setVisibility(View.VISIBLE);
+        binding.inputLoginPasswordLayout.setBoxStrokeColor(Color.RED);
+        binding.inputLoginPasswordLayout.setDefaultHintTextColor(
+            ColorStateList.valueOf(
+                Color.RED
+            )
+        );
+        binding.errorText.setText("Неверный логин или пароль");
+        binding.errorText.setVisibility(View.VISIBLE);
     }
 
     private fun toResetPassword() {

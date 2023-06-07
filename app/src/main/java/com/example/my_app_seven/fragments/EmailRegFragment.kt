@@ -1,6 +1,7 @@
 package com.example.my_app_seven.fragments
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -56,7 +57,10 @@ class EmailRegFragment : Fragment() {
                         findNavController().navigate(R.id.action_emailRegFragment_to_profileRegFragment)
                         Toast.makeText(requireContext(), "check email", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(requireContext(), "failed", Toast.LENGTH_SHORT).show()
+                         binding.inputRegEmailFragment.setBoxStrokeColor(Color.RED); //
+                         binding.inputRegEmailFragment.setDefaultHintTextColor(ColorStateList.valueOf(Color.RED)); //
+                         binding.errorText.setText("Данная почта уже зарегистривана"); //
+                         binding.errorText.setVisibility(View.VISIBLE);
                     }
                 }
                 override fun onFailure(call: Call<Unit>, t: Throwable) {

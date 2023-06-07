@@ -68,7 +68,6 @@ class ProfileRegFragment : Fragment() {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-
                     val dat = "$year-${monthOfYear + 1}-$dayOfMonth"
                     datePicker.setText(dat)
                 },
@@ -85,12 +84,6 @@ class ProfileRegFragment : Fragment() {
             findNavController().navigate(R.id.action_profileRegFragment_to_emailRegFragment)
         }
     }
-
-//    private fun toCreatePassword() {
-//        binding.regProfileBtnNext.setOnClickListener {
-//            findNavController().navigate(R.id.action_profileRegFragment_to_createPasswordFragment)
-//        }
-//    }
 
     private fun checkInput() {
         binding.inputRegNameProfile.addTextChangedListener(inputTextWatcher)

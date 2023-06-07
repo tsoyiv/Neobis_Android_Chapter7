@@ -77,9 +77,10 @@ class CreatePasswordFragment : Fragment() {
                 response: Response<Unit>
             ) {
                 if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "registered", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "User successfully registered. Check email to activate account", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_createPasswordFragment_to_loginFragment)
                 } else {
-                    Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "User with this email already exist", Toast.LENGTH_SHORT).show()
                 }
             }
 
