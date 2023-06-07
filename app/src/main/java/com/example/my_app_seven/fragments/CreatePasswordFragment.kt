@@ -113,26 +113,6 @@ class CreatePasswordFragment : Fragment() {
         }
     }
 
-
-    private fun callDialog() {
-        val dialogBinding = layoutInflater.inflate(R.layout.custom_alert_dialog_email, null)
-//        AlertDialog.Builder(requireContext()).apply {
-//            setTitle("На вашу почту «dojacat01.gmail.com» было отправлено письмо ")
-//        }
-
-        val myDialog = Dialog(requireContext())
-        myDialog.setContentView(dialogBinding)
-
-        myDialog.setCancelable(true)
-        myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        myDialog.show()
-
-        val yesBtn = dialogBinding.confirm_btn
-        yesBtn.setOnClickListener {
-            myDialog.dismiss()
-        }
-    }
-
     private fun checkInput() {
         binding.inputCreatePassword.addTextChangedListener(inputTextWatcher)
         binding.inputCreatePasswordRepeat.addTextChangedListener(inputTextWatcher)

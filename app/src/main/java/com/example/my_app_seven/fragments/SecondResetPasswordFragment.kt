@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
 import com.example.my_app_seven.api.RetrofitInstance
@@ -20,6 +21,7 @@ import com.example.my_app_seven.databinding.FragmentSecondResetPasswordBinding
 import com.example.my_app_seven.models.ForgotPasswordConfirmRequest
 import com.example.my_app_seven.models.ForgotPasswordRequest
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.custom_snackbar.view.*
 import kotlinx.android.synthetic.main.fragment_second_reset_password.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,46 +54,66 @@ class SecondResetPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkInput()
         resetPasswordCreate()
-        returnToLoginPage()
     }
 
-    private fun returnToLoginPage() {
-        binding.regResetPasswordBtnSave.setOnClickListener {
+
+    private fun callSnackBarAndNavigate() {
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT)
+        val inflater = LayoutInflater.from(snackbar.context)
+        val customSnackbarLayout = inflater.inflate(R.layout.custom_snackbar, null)
+
+        val snackbarView = snackbar.view
+        snackbarView.setBackgroundColor(Color.TRANSPARENT)
+        val snackbarLayout = FrameLayout(requireContext())
+        val layoutParams = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        layoutParams.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+        snackbarLayout.layoutParams = layoutParams
+
+        snackbarLayout.addView(customSnackbarLayout)
+        (snackbarView as Snackbar.SnackbarLayout).addView(snackbarLayout, 0)
+        snackbar.show()
+
+        view?.postDelayed({
             findNavController().navigate(R.id.action_secondResetPasswordFragment_to_loginFragment)
-        }
+        }, 2000)
     }
+
 
     private fun resetPasswordCreate() {
         binding.regResetPasswordBtnSave.setOnClickListener {
-            val new_password = binding.inputNewPassword.text.toString()
-            val new_password_confirm = binding.inputNewPasswordRepeat.text.toString()
-            val activation_code = binding.inputCode.text.toString()
+            val newPassword = binding.inputNewPassword.text.toString()
+            val newPasswordConfirm = binding.inputNewPasswordRepeat.text.toString()
+            val activationCode = binding.inputCode.text.toString()
 
-            val resetPasswordRequest = ForgotPasswordConfirmRequest(new_password, new_password_confirm, activation_code)
-
-            CoroutineScope(Dispatchers.Main).launch {
-                try {
-                    val response = resetPasswordConfirmAsync(resetPasswordRequest)
-                    if (response.isSuccessful) {
-                        Toast.makeText(context, "Password changed successfully", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val errorMessage = response.errorBody()?.string()
-                        if (errorMessage != null && errorMessage.contains("send code is not correct")) {
-                            Toast.makeText(context, "The activation code is incorrect", Toast.LENGTH_SHORT).show()
+            val request =
+                ForgotPasswordConfirmRequest(
+                    newPassword,
+                    newPasswordConfirm,
+                    activationCode
+                )
+            userAPI.resetPasswordConfirm(request)
+                .enqueue(object : retrofit2.Callback<Unit> {
+                    override fun onResponse(
+                        call: Call<Unit>,
+                        response: Response<Unit>
+                    ) {
+                        if (response.isSuccessful) {
+                            callSnackBarAndNavigate()
                         } else {
-                            Toast.makeText(context, "Failed to reset password. Please try again.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Error happened",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
-                } catch (e: Exception) {
-                    Toast.makeText(context, "Failed to reset password. Please try again.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
 
-    private suspend fun resetPasswordConfirmAsync(request: ForgotPasswordConfirmRequest): Response<Unit> {
-        return withContext(Dispatchers.IO) {
-            RetrofitInstance.api.resetPasswordConfirm(request)
+                    override fun onFailure(call: retrofit2.Call<Unit>, t: Throwable) {
+                    }
+                })
         }
     }
 
@@ -103,7 +125,12 @@ class SecondResetPasswordFragment : Fragment() {
     }
 
     private val inputTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        override fun beforeTextChanged(
+            s: CharSequence?,
+            start: Int,
+            count: Int,
+            after: Int
+        ) {
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -113,7 +140,6 @@ class SecondResetPasswordFragment : Fragment() {
 
             if (isPasswordsSimilar && hasUppercase && hasNumber && hasSymbol && passwordResetCode.isNotEmpty()) {
                 button.isEnabled = true
-                callSnackBar()
                 button.setBackgroundResource(R.drawable.rounded_btn)
             } else {
                 button.isEnabled = false
@@ -125,25 +151,7 @@ class SecondResetPasswordFragment : Fragment() {
         }
     }
 
-    @SuppressLint("RestrictedApi")
-    private fun callSnackBar() {
-        binding.regResetPasswordBtnSave.setOnClickListener {
-            val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT)
-            val inflater = LayoutInflater.from(snackbar.context)
-            val customSnackbarLayout = inflater.inflate(R.layout.custom_snackbar, null)
 
-            snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-            val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-            snackbarLayout.setPadding(0, 0, 0, 0)
-            snackbarLayout.addView(customSnackbarLayout, 0)
-
-            val params = snackbarLayout.layoutParams as FrameLayout.LayoutParams
-            params.gravity = Gravity.TOP
-            snackbarLayout.layoutParams = params
-
-            snackbar.show()
-        }
-    }
 
     private fun registrationDataCheck() {
         val password = binding.inputNewPassword.text.toString()
