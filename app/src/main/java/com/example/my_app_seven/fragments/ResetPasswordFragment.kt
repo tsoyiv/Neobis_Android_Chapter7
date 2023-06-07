@@ -12,14 +12,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
+import com.example.my_app_seven.api.RetrofitInstance
+import com.example.my_app_seven.api.UserAPI
 import com.example.my_app_seven.databinding.FragmentResetPasswordBinding
+import com.example.my_app_seven.models.ForgotPasswordRequest
 import kotlinx.android.synthetic.main.custom_alert_dialog_email.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ResetPasswordFragment : Fragment() {
 
     private lateinit var binding: FragmentResetPasswordBinding
+    private val userAPI: UserAPI = RetrofitInstance.api
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +42,29 @@ class ResetPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         toLoginPage()
         checkInput()
-        toResetPassword()
+        resetPasswordRequest()
+    }
+
+    private fun resetPasswordRequest() {
+        binding.resetBtnNext.setOnClickListener {
+            val email = binding.inputResetEmail.text.toString()
+
+            userAPI.forgotPasswordRequest(ForgotPasswordRequest(email)).enqueue(object :
+                Callback<Unit> {
+                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                    if (response.isSuccessful) {
+                        toResetPassword()
+                        Toast.makeText(requireContext(), "message sent", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                    // Handle network failure or other errors
+                    // For example, show an error message or retry the request
+                }
+            })
+        }
     }
 
     private fun toResetPassword() {

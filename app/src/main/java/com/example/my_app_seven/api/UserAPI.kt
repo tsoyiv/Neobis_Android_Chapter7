@@ -15,6 +15,9 @@ interface UserAPI {
 //    @POST("/forgot_password_confirm/")
 //    fun forgotPasswordConfirm(@Body request: ForgotPasswordRequest): Call<UserAPI>
 
+    @POST("forgot_password/")
+    fun forgotPasswordRequest(@Body request: ForgotPasswordRequest): Call<Unit>
+
     @POST("login/")
     suspend fun login(@Body request: LoginRequest): LoginResponse
 

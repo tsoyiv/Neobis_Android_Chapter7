@@ -15,6 +15,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.example.my_app_seven.R
 import com.example.my_app_seven.databinding.FragmentSecondResetPasswordBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_second_reset_password.*
 
 
 class SecondResetPasswordFragment : Fragment() {
@@ -41,15 +42,17 @@ class SecondResetPasswordFragment : Fragment() {
     private fun checkInput() {
         binding.inputNewPassword.addTextChangedListener(inputTextWatcher)
         binding.inputNewPasswordRepeat.addTextChangedListener(inputTextWatcher)
+        binding.inputCode.addTextChangedListener(inputTextWatcher)
     }
     private val inputTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val button = binding.regResetPasswordBtnSave
+            val passwordResetCode = binding.inputCode.text.toString().trim()
             registrationDataCheck()
 
-            if (isPasswordsSimilar && hasUppercase && hasNumber && hasSymbol) {
+            if (isPasswordsSimilar && hasUppercase && hasNumber && hasSymbol && passwordResetCode.isNotEmpty()) {
                 button.isEnabled = true
                 callSnackBar()
                 button.setBackgroundResource(R.drawable.rounded_btn)
