@@ -10,10 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
 import com.example.my_app_seven.api.UserAPI
 import com.example.my_app_seven.databinding.FragmentProfileRegBinding
+import com.example.my_app_seven.models.UserRegRequest
+import com.example.my_app_seven.view_model.RegistrationViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,13 +27,12 @@ import java.util.*
 class ProfileRegFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileRegBinding
-    private val calendar: Calendar = Calendar.getInstance()
+    private val registrationViewModel: RegistrationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentProfileRegBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -40,32 +42,19 @@ class ProfileRegFragment : Fragment() {
         pickDate()
         checkInput()
         toEmailPageBack()
-        toCreatePassword()
-        //register()
+        fillProfInfo()
     }
 
-//    private fun register() {
-//        binding.regProfileBtnNext.setOnClickListener {
-//
-//            val name = binding.inputRegNameProfile.text.toString().trim()
-//            val surname = binding.inputRegSurnameProfile.text.toString().trim()
-//            val birthDate = binding.inputRegBirthProfile.text.toString().trim()
-//            val email = binding.inputEmailProfile.text.toString().trim()
-//            //val apiRepository = UserAPI(apiService)
-//
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val response = apiRepository.register(email)
-//                withContext(Dispatchers.Main) {
-//                    if (response.isSuccessful) {
-//                        Toast.makeText(requireContext(), "okay", Toast.LENGTH_SHORT).show()
-//                    } else {
-//                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-//                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//        }
-//    }
+    private fun fillProfInfo() {
+        binding.regProfileBtnNext.setOnClickListener {
+            registrationViewModel.name = binding.inputRegNameProfile.text.toString()
+            registrationViewModel.email = binding.inputEmailProfile.text.toString()
+            registrationViewModel.birthday = binding.inputRegBirthProfile.text.toString()
+            registrationViewModel.lastName = binding.inputRegSurnameProfile.text.toString()
+
+            findNavController().navigate(R.id.action_profileRegFragment_to_createPasswordFragment)
+        }
+    }
 
     private fun pickDate() {
         val datePicker = binding.inputRegBirthProfile
@@ -80,7 +69,7 @@ class ProfileRegFragment : Fragment() {
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
 
-                    val dat = (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
+                    val dat = "$year-${monthOfYear + 1}-$dayOfMonth"
                     datePicker.setText(dat)
                 },
                 year,
@@ -97,11 +86,11 @@ class ProfileRegFragment : Fragment() {
         }
     }
 
-    private fun toCreatePassword() {
-        binding.regProfileBtnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_profileRegFragment_to_createPasswordFragment)
-        }
-    }
+//    private fun toCreatePassword() {
+//        binding.regProfileBtnNext.setOnClickListener {
+//            findNavController().navigate(R.id.action_profileRegFragment_to_createPasswordFragment)
+//        }
+//    }
 
     private fun checkInput() {
         binding.inputRegNameProfile.addTextChangedListener(inputTextWatcher)

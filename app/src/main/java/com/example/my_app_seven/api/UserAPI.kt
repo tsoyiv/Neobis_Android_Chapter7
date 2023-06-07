@@ -22,6 +22,12 @@ interface UserAPI {
     @POST("login/")
     suspend fun login(@Body request: LoginRequest): LoginResponse
 
+    @POST("register/")
+    fun register(@Body request: EmailRegRequest): Call<Unit>
+
+    @POST("register_confirm/")
+    fun registerUser(@Body request: UserRegRequest): Call<Unit>
+
 //    @POST("/refresh/")
 //    fun refresh(): Call<UserAPI>
 //

@@ -10,14 +10,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
+import com.example.my_app_seven.api.RetrofitInstance
+import com.example.my_app_seven.api.UserAPI
 import com.example.my_app_seven.databinding.FragmentEmailRegBinding
+import com.example.my_app_seven.models.EmailRegRequest
 import kotlinx.android.synthetic.main.custom_alert_dialog_email.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EmailRegFragment : Fragment() {
 
     private lateinit var binding: FragmentEmailRegBinding
+    private val userAPI: UserAPI = RetrofitInstance.api
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +40,30 @@ class EmailRegFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toMainPage()
-        toProfilePage()
+        //toProfilePage()
         checkInput()
+        loginReg()
+    }
+
+    private fun loginReg() {
+        binding.regEmailBtnNext.setOnClickListener {
+            val email = binding.inputRegEmail.text.toString()
+            val emailRequest = EmailRegRequest(email)
+
+            userAPI.register(emailRequest).enqueue(object : Callback<Unit> {
+                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                    if (response.isSuccessful) {
+                        findNavController().navigate(R.id.action_emailRegFragment_to_profileRegFragment)
+                        Toast.makeText(requireContext(), "check email", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                    // Handle the failure case when the email sending encounters an exception
+                }
+            })
+        }
     }
 
     private fun toProfilePage() {

@@ -8,14 +8,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.my_app_seven.R
+import com.example.my_app_seven.api.RetrofitInstance
 import com.example.my_app_seven.databinding.FragmentCreatePasswordBinding
+import com.example.my_app_seven.models.UserRegRequest
+import com.example.my_app_seven.view_model.RegistrationViewModel
 import kotlinx.android.synthetic.main.fragment_create_password.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CreatePasswordFragment : Fragment() {
 
     private lateinit var binding: FragmentCreatePasswordBinding
+    private val registrationViewModel: RegistrationViewModel by activityViewModels()
     private var isPasswordsSimilar = false
     private var hasUppercase = false
     private var hasNumber = false
@@ -34,6 +43,49 @@ class CreatePasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         toProfilePage()
         checkInput()
+        creationPassword()
+    }
+
+    private fun creationPassword() {
+        binding.regCreatePasswordBtnNext.setOnClickListener {
+            val password1 = binding.inputCreatePassword.text.toString()
+            val password2 = binding.inputCreatePasswordRepeat.text.toString()
+
+            if (password1 == password2) {
+                registrationViewModel.password = password1
+                registerUser()
+            } else {
+                Toast.makeText(requireContext(), "Passwords do not match", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun registerUser() {
+        val api = RetrofitInstance.api
+        val requestBody = UserRegRequest(
+            email = registrationViewModel.email ?: "",
+            name = registrationViewModel.name ?: "",
+            last_name = registrationViewModel.lastName ?: "",
+            birthday = registrationViewModel.birthday ?: "",
+            password = registrationViewModel.password ?: "",
+            password2 = registrationViewModel.password ?: ""
+        )
+
+        val call = api.registerUser(requestBody)
+        call.enqueue(object : Callback<Unit> {
+            override fun onResponse(
+                call: Call<Unit>,
+                response: Response<Unit>
+            ) {
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "registered", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+            }
+        })
     }
 
     private fun checkInput() {
