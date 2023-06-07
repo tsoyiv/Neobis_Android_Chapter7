@@ -53,7 +53,8 @@ class ResetPasswordFragment : Fragment() {
                 Callback<Unit> {
                 override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                     if (response.isSuccessful) {
-                        toResetPassword()
+                        //toResetPassword()
+                        findNavController().navigate(R.id.action_resetPasswordFragment_to_secondResetPasswordFragment)
                         Toast.makeText(requireContext(), "message sent", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
