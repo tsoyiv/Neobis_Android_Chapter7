@@ -81,7 +81,6 @@ class SecondResetPasswordFragment : Fragment() {
         }, 2000)
     }
 
-
     private fun resetPasswordCreate() {
         binding.regResetPasswordBtnSave.setOnClickListener {
             val newPassword = binding.inputNewPassword.text.toString()
@@ -150,7 +149,6 @@ class SecondResetPasswordFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {
         }
     }
-
 
 
     private fun registrationDataCheck() {
